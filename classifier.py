@@ -8,7 +8,7 @@ class Classifier(BaseEstimator):
         self.clf = Pipeline([
             ('imputer', Imputer(strategy='most_frequent')),
             ('rf', AdaBoostClassifier(
-                base_estimator=RandomForestClassifier(max_depth=5, n_estimators=2),
+                base_estimator=RandomForestClassifier(max_depth=5, n_estimators=10),
                 n_estimators=10)
             )
         ])
