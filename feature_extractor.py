@@ -1,5 +1,3 @@
-import numpy as np
-
 def fold_time_series(time_point, period, div_period):
     return time_point - 1.0 * int(time_point / (period / div_period)) * period / div_period
 
@@ -23,6 +21,8 @@ def get_bin_means(instance, num_bins):
             feature_array[num_bins:] = binned_means
     return feature_array
 
+import numpy as np
+
 class FeatureExtractor():
 
     def __init__(self):
@@ -32,5 +32,15 @@ class FeatureExtractor():
         pass
 
     def transform(self, X_dict):
-        num_bins = 15
-        return np.array([get_bin_means(instance, num_bins) for instance in X_dict])
+        cols = [
+            'magnitude_b', 
+            'magnitude_r'
+        ]
+        X_array = np.array([[instance[col] for col in cols] for instance in X_dict])
+        real_period = np.array([instance['period'] / instance['div_period']
+            for instance in X_dict])
+        X_array = np.concatenate((X_array.T, [real_period])).T
+        num_bins = 5
+        X_array_variable_features = np.array([get_bin_means(instance, num_bins) for instance in X_dict])
+        X_array = np.concatenate((X_array.T, X_array_variable_features.T)).T
+        return X_array
