@@ -28,7 +28,7 @@ class FeatureExtractor():
     def __init__(self):
         pass
 
-    def fit(self, X_dict):
+    def fit(self, X_dict, y):
         pass
 
     def transform(self, X_dict):
