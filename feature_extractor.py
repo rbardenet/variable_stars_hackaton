@@ -23,7 +23,7 @@ def get_bin_means(instance, num_bins):
 
 import numpy as np
 
-class FeatureExtractor():
+class FeatureExtractor()
 
     def __init__(self):
         pass
