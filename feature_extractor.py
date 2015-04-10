@@ -5,7 +5,7 @@ from gaussian_process_no_normalization_of_inputs import GaussianProcess
 def squared_exponential_periodic_1D(theta, d):
     theta = np.asarray(theta, dtype=np.float)
     d = np.asarray(d, dtype=np.float)
-    return np.exp(-theta[0] * np.sum(np.sin(abs(d)) ** 2, axis=1))
+    return np.exp(-theta[0] * np.sum(np.sin(abs(d)/2.) ** 2, axis=1))
 
 def fold_time_series(time_point, period, div_period):
     real_period = period / div_period
@@ -45,7 +45,7 @@ class FeatureExtractor(object):
             if ii / 100 * 100 == ii:
                 print ii
             real_period = x['period'] / x['div_period']
-            x_new = [x['magnitude_b'], x['magnitude_r'], x['asym_b'], real_period]
+            x_new = [x['magnitude_b'], x['magnitude_r'], x['asym_b'], x['asym_r'], real_period]
             for color in ['r', 'b']:
                 unfold_sample(x, color=color)
                 x_train = x['phase_' + color]
@@ -78,7 +78,7 @@ class FeatureExtractor(object):
 
                 try:
                     gp = GaussianProcess(regr='constant', theta0=1./1.0, thetaL=1./50., thetaU=1./0.1, 
-                                 #corr=squared_exponential_periodic_1D,
+                                 corr=squared_exponential_periodic_1D,
                                  nugget=y_sigma*y_sigma)
                     gp.fit(x_train[:, np.newaxis], y_train[:, np.newaxis])
                 except (Exception, ValueError):
@@ -86,8 +86,8 @@ class FeatureExtractor(object):
                     x_train, unique_indexes = np.unique(x_train, return_index=True)
                     y_train = y_train[unique_indexes]
                     y_sigma = y_sigma[unique_indexes]
-                    gp = GaussianProcess(regr='constant', theta0=.15, thetaL=.1, thetaU=.2, 
-                                 #corr=squared_exponential_periodic_1D,
+                    gp = GaussianProcess(regr='constant', theta0=1., thetaL=1./50., thetaU=1./0.1, 
+                                 corr=squared_exponential_periodic_1D,
                                  nugget=y_sigma*y_sigma)
                     gp.fit(x_train[:, np.newaxis], y_train[:, np.newaxis])
                 # this is the function you should play with, three periods (although for
