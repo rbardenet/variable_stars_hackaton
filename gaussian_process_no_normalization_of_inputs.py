@@ -237,7 +237,7 @@ class GaussianProcess(BaseEstimator, RegressorMixin):
         self.optimizer = optimizer
         self.random_start = random_start
         self.random_state = random_state
-
+        
     def fit(self, X, y):
         """
         The Gaussian Process model fitting method.

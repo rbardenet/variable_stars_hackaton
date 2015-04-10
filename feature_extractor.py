@@ -34,7 +34,7 @@ class FeatureExtractor(object):
         num_points_per_period = 200
         bins_per_period = 10
         sampling_rate = num_points_per_period / bins_per_period
-        t_test = np.linspace(-2 * np.pi, 4 * np.pi, 3 * num_points_per_period)
+        t_test = np.linspace(0, 2*np.pi, num_points_per_period)
         num_gp_bins = 10
         gp_bins = [i * 2 * np.pi / num_gp_bins for i in range(num_gp_bins + 1)]
    
@@ -78,7 +78,7 @@ class FeatureExtractor(object):
 
                 try:
                     gp = GaussianProcess(regr='constant', theta0=1./1.0, thetaL=1./50., thetaU=1./0.1, 
-                                 corr=squared_exponential_periodic_1D,
+                                 #corr=squared_exponential_periodic_1D,
                                  nugget=y_sigma*y_sigma)
                     gp.fit(x_train[:, np.newaxis], y_train[:, np.newaxis])
                 except (Exception, ValueError):
@@ -86,8 +86,8 @@ class FeatureExtractor(object):
                     x_train, unique_indexes = np.unique(x_train, return_index=True)
                     y_train = y_train[unique_indexes]
                     y_sigma = y_sigma[unique_indexes]
-                    gp = GaussianProcess(regr='constant', theta0=1./1., thetaL=1./50., thetaU=1./0.1, 
-                                 corr=squared_exponential_periodic_1D,
+                    gp = GaussianProcess(regr='constant', theta0=.15, thetaL=.1, thetaU=.2, 
+                                 #corr=squared_exponential_periodic_1D,
                                  nugget=y_sigma*y_sigma)
                     gp.fit(x_train[:, np.newaxis], y_train[:, np.newaxis])
                 # this is the function you should play with, three periods (although for
