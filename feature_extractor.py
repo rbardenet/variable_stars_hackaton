@@ -45,7 +45,7 @@ class FeatureExtractor(object):
             if ii / 100 * 100 == ii:
                 print ii
             real_period = x['period'] / x['div_period']
-            x_new = [x['magnitude_b'], x['magnitude_r'], real_period]
+            x_new = [x['magnitude_b'], x['magnitude_r'], x['asym_b'], real_period]
             for color in ['r', 'b']:
                 unfold_sample(x, color=color)
                 x_train = x['phase_' + color]
@@ -99,9 +99,9 @@ class FeatureExtractor(object):
                 amplitude = max(y_test) - min_y
                 x_new.append(amplitude)
                 # first max after t = 0
-                amax_index = num_points_per_period + np.argmax(y_test[num_points_per_period:2 * num_points_per_period])
+                amax_index = np.argmax(y_test)
                 # sample points from second period [0, 2pi]
-                gp_samples = y_test[amax_index : amax_index + num_points_per_period : sampling_rate]
+                gp_samples = y_test[::sampling_rate]
                 # normalize sampled points between 0 and 1
                 gp_samples_normalized = 1 - (gp_samples - min_y) / amplitude
                 for gp_sample in gp_samples_normalized:
