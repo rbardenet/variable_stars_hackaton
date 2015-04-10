@@ -284,11 +284,9 @@ class GaussianProcess(BaseEstimator, RegressorMixin):
             X_std[X_std == 0.] = 1.
             y_std[y_std == 0.] = 1.
             # center and scale X if necessary
-            X = (X - X_mean) / X_std
+            # X = (X - X_mean) / X_std # Rémi: cancel normalization
             y = (y - y_mean) / y_std
         else:
-            X_mean = np.zeros(1)
-            X_std = np.ones(1)
             y_mean = np.zeros(1)
             y_std = np.ones(1)
 
@@ -429,7 +427,7 @@ class GaussianProcess(BaseEstimator, RegressorMixin):
             # (evaluates all given points in a single batch run)
 
             # Normalize input
-            print("here I modified sklearn")
+            #print("here I modified sklearn")
             #X = (X - self.X_mean) / self.X_std
 
             # Initialize output
