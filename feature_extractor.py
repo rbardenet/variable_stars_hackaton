@@ -34,7 +34,7 @@ class FeatureExtractor(object):
         num_points_per_period = 200
         bins_per_period = 10
         sampling_rate = num_points_per_period / bins_per_period
-        t_test = np.linspace(0, 2*np.pi, num_points_per_period)
+        t_test = np.linspace(-2*np.pi, 4*np.pi, 3*num_points_per_period)
         num_gp_bins = 10
         gp_bins = [i * 2 * np.pi / num_gp_bins for i in range(num_gp_bins + 1)]
    
@@ -99,9 +99,9 @@ class FeatureExtractor(object):
                 amplitude = max(y_test) - min_y
                 x_new.append(amplitude)
                 # first max after t = 0
-                amax_index = np.argmax(y_test)
+                amax_index = num_points_per_period + np.argmax(y_test[num_points_per_period:2 * num_points_per_period])
                 # sample points from second period [0, 2pi]
-                gp_samples = y_test[::sampling_rate]
+                gp_samples = y_test[amax_index : amax_index + num_points_per_period : sampling_rate]
                 # normalize sampled points between 0 and 1
                 gp_samples_normalized = 1 - (gp_samples - min_y) / amplitude
                 for gp_sample in gp_samples_normalized:
