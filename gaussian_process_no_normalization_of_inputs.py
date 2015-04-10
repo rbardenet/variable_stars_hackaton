@@ -9,14 +9,15 @@ from __future__ import print_function
 import numpy as np
 from scipy import linalg, optimize
 
-from ..base import BaseEstimator, RegressorMixin
-from ..metrics.pairwise import manhattan_distances
-from ..utils import check_random_state, check_array, check_X_y
-from ..utils.validation import check_is_fitted
-from . import regression_models as regression
-from . import correlation_models as correlation
+from sklearn.base import BaseEstimator, RegressorMixin
+from sklearn.metrics.pairwise import manhattan_distances
+from sklearn.utils import check_random_state, check_array, check_X_y
+from sklearn.utils.validation import check_is_fitted
+from sklearn.gaussian_process import regression_models as regression
+from sklearn.gaussian_process import correlation_models as correlation
 
 MACHINE_EPSILON = np.finfo(np.double).eps
+
 
 def l1_cross_distances(X):
     """
@@ -441,18 +442,10 @@ class GaussianProcess(BaseEstimator, RegressorMixin):
             f = self.regr(X)
             r = self.corr(self.theta_, dx).reshape(n_eval, n_samples)
 
-            #Rémi
-            print("r00", r[0,0], X[0], self.X[0], self.theta_)
-
+        
             # Scaled predictor
             y_ = np.dot(f, self.beta) + np.dot(r, self.gamma)
 
-            #Remi
-            print("In sklearn")
-            np.savetxt("X.txt", X)
-            np.savetxt("selfX.txt", self.X)
-            np.savetxt("r.txt", r)
-            
             # Predictor
             y = (self.y_mean + self.y_std * y_).reshape(n_eval, n_targets)
 

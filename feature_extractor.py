@@ -1,5 +1,6 @@
 import numpy as np
-from sklearn.gaussian_process import GaussianProcess
+from gaussian_process_no_normalization_of_inputs import GaussianProcess
+
 
 def squared_exponential_periodic_1D(theta, d):
     theta = np.asarray(theta, dtype=np.float)
